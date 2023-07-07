@@ -20,12 +20,15 @@ type NacosConf struct {
 
 // Nacos 配置中心客户端
 type NacosConfigClient struct {
+	// 默认分组，一般被用作环境区分，如：dev、test、prod
+	defaultGroup string
+
 	config *NacosConf
 	client config_client.IConfigClient
 }
 
 // 初始化函数
-func NewNacosConfigClinet(conf NacosConf) (*NacosConfigClient, error) {
+func NewNacosConfigClinet(conf NacosConf, defaultGroup string) (*NacosConfigClient, error) {
 	// 创建客户端
 	client, err := clients.NewConfigClient(
 		vo.NacosClientParam{
@@ -38,17 +41,22 @@ func NewNacosConfigClinet(conf NacosConf) (*NacosConfigClient, error) {
 	}
 
 	return &NacosConfigClient{
-		config: &conf,
-		client: client,
+		defaultGroup: defaultGroup,
+		config:       &conf,
+		client:       client,
 	}, nil
 }
 
 // WatchF 监听配置变化
-func (ncc *NacosConfigClient) WatchF(groupid, dataid string, onChange func(namespace, group, dataId, data string)) {
+func (ncc *NacosConfigClient) WatchF(group, dataid string, onChange func(namespace, group, dataId, data string)) {
+	if group == "" {
+		group = ncc.defaultGroup
+	}
+
 	// 1、获取配置
 	params := vo.ConfigParam{
 		DataId: dataid,
-		Group:  groupid,
+		Group:  group,
 	}
 	content, err := ncc.client.GetConfig(params)
 	if err != nil {
@@ -57,7 +65,7 @@ func (ncc *NacosConfigClient) WatchF(groupid, dataid string, onChange func(names
 
 	// 初始化一次
 	clientConfig, _ := ncc.client.(*config_client.ConfigClient).GetClientConfig()
-	onChange(clientConfig.NamespaceId, groupid, dataid, content)
+	onChange(clientConfig.NamespaceId, group, dataid, content)
 
 	// 2、监听配置
 	watchParams := params

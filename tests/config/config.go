@@ -1,6 +1,6 @@
 package config
 
-//go:generate gonacos_config --config=SomeConfig --group=13 --dataid=config --codec=yaml
+//go:generate gonacos_config --config=SomeConfig --dataid=config --codec=yaml
 type SomeConfig struct {
 	TestConfig  string `yaml:"TestConfig"`
 	TestConfig2 string `yaml:"TestConfig2"`

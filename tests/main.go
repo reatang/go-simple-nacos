@@ -12,16 +12,22 @@ import (
 )
 
 var (
-	username    = flag.String("username", "", "nacos username")
-	password    = flag.String("password", "", "nacos password")
-	addr        = flag.String("addr", "", "nacos addr")
-	namespaceId = flag.String("namespace_id", "", "nacos namespace id")
-	grpcPort    = flag.Uint64("grpc_port", 0, "nacos grpc port")
+	username     = flag.String("username", "", "nacos username")
+	password     = flag.String("password", "", "nacos password")
+	addr         = flag.String("addr", "", "nacos addr")
+	namespaceId  = flag.String("namespace_id", "", "nacos namespace id")
+	defaultGroup = flag.String("default_group", "", "nacos default group")
+	grpcPort     = flag.Uint64("grpc_port", 0, "nacos grpc port")
 )
 
 func main() {
 	flag.Parse()
-	if *username == "" || *password == "" || *addr == "" || *namespaceId == "" || *grpcPort == 0 {
+	if *username == "" ||
+		*password == "" ||
+		*addr == "" ||
+		*namespaceId == "" ||
+		*grpcPort == 0 ||
+		*defaultGroup == "" {
 		fmt.Println("参数错误")
 		return
 	}
@@ -48,7 +54,7 @@ func main() {
 		},
 	}
 
-	ncc, err := gonacos.NewNacosConfigClinet(conf)
+	ncc, err := gonacos.NewNacosConfigClinet(conf, *defaultGroup)
 	if err != nil {
 		panic(err)
 	}
