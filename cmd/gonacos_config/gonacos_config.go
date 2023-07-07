@@ -19,7 +19,11 @@ var (
 	configTemplate = `
 var __{{ .ConfigName }} = atomic.Value{}
 
-func Register{{ .ConfigName }}(ncc *gonacos.NacosConfigClient) {
+func Register{{ .ConfigName }}(ncc *gonacos.NacosConfigClient, defConf *{{ .ConfigName }}) {
+	if defConf != nil {
+		__{{ .ConfigName }}.Store(*defConf)
+	}
+
 	ncc.WatchF("{{ .Group }}", "{{ .DataId }}", func(namespace, group, dataId, data string) {
 		var c {{ .ConfigName }}
 		{{ .DecodeFuncCode }}

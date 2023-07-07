@@ -59,7 +59,7 @@ func main() {
 		panic(err)
 	}
 
-	config.RegisterSomeConfig(ncc)
+	config.RegisterSomeConfig(ncc, nil)
 
 	tc, _ := context.WithTimeout(context.Background(), 20*time.Second)
 	n := atomic.Int64{}

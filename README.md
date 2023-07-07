@@ -9,6 +9,11 @@ https://github.com/nacos-group/nacos-sdk-go 太难用了，简化使用方案
 
 ## 使用
 
+安装：
+```
+> go install github.com/reatang/go-simple-nacos/cmd/gonacos_config
+```
+
 1、设置映射配置的结构体，并编写生成命令
 ```go
 // file: config/nacos_config.go
@@ -38,8 +43,8 @@ if err != nil {
     panic(err)
 }
 
-// 注册
-config.RegisterSomeConfig(ncc)
+// 注册，第二个参数可以传配置的默认值
+config.RegisterSomeConfig(ncc, nil)
 
 
 // 可以在业务中线程安全的使用了
