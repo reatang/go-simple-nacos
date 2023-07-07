@@ -28,8 +28,8 @@ type SomeConfig struct {
 3、变量注册监听到nacos
 ```go
 
-// 初始化nacos
-conf := gonacos.NacosConf {
+// 初始化nacos，配置参数请看 nacos-sdk-go的文档
+conf := gonacos.NacosConf{
     ...
 }
 
