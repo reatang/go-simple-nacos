@@ -9,7 +9,7 @@ https://github.com/nacos-group/nacos-sdk-go 太难用了，简化使用方案
 
 ## 使用
 
-安装：
+安装辅助生成工具：
 ```
 > go install github.com/reatang/go-simple-nacos/cmd/gonacos_config
 ```
@@ -52,7 +52,8 @@ sc := config.GetSomeConfig()
 fmt.Println(sc.TestConfig)
 ```
 
-
+---
 
 吐槽：
+
 nacos-sdk-go，完全是用java风格写的golang代码啊！
