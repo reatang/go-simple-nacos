@@ -32,7 +32,7 @@ type SomeConfig struct {
 
 配置，并编写生成命令
 
-**必须是指针变量**
+**注意：必须是指针变量**
 
 ```go
 // file: config/config.go
