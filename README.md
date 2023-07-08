@@ -43,14 +43,14 @@ type SomeConfig struct {
 }
 
 // 匿名写法
-//go:generate gonacos_config --embed=SomeStruct --config=SomeConfig --dataid=config --codec=yaml
-type SomeStruct struct {
+//go:generate gonacos_config --embed=GlobalConfig --config=SomeConfig --dataid=config --codec=yaml
+type GlobalConfig struct {
     *SomeConfig
 }
 
 // 有变量名的写法
-//go:generate gonacos_config --embed=SomeStruct --config=Some:SomeConfig --dataid=config --codec=yaml
-type SomeStruct struct {
+//go:generate gonacos_config --embed=GlobalConfig --config=Some:SomeConfig --dataid=config --codec=yaml
+type GlobalConfig struct {
     Some *SomeConfig
 }
 
