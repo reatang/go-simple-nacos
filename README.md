@@ -49,9 +49,9 @@ type GlobalConfig struct {
 }
 
 // 有变量名的写法
-//go:generate gonacos_config --embed=GlobalConfig --config=Some:SomeConfig --dataid=config --codec=yaml
+//go:generate gonacos_config --embed=GlobalConfig --config=some:SomeConfig --dataid=config --codec=yaml
 type GlobalConfig struct {
-    Some *SomeConfig
+	some *SomeConfig
 }
 
 ```
