@@ -51,7 +51,7 @@ type GlobalConfig struct {
 // 有变量名的写法
 //go:generate gonacos_config --embed=GlobalConfig --config=some:SomeConfig --dataid=config --codec=yaml
 type GlobalConfig struct {
-	some *SomeConfig
+    some *SomeConfig
 }
 
 ```
