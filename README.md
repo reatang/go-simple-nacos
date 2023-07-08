@@ -7,16 +7,19 @@ https://github.com/nacos-group/nacos-sdk-go 太难用了，简化使用方案
 
     略....
 
-## 使用
+## 安装辅助生成工具
 
-安装辅助生成工具：
 ```
 > go install github.com/reatang/go-simple-nacos/cmd/gonacos_config
 ```
 
-1、设置映射配置的结构体，并编写生成命令
+## 使用
+
+### 独立结构体配置映射
+
+配置，并编写生成命令
 ```go
-// file: config/nacos_config.go
+// file: config/config.go
 package config
 
 //go:generate gonacos_config --config=SomeConfig --dataid=config --codec=yaml
@@ -25,12 +28,42 @@ type SomeConfig struct {
 }
 ```
 
-2、跳转到 `config` 目录下，执行命令，生成配置代码
+### 嵌入结构体配置映射
+
+配置，并编写生成命令
+
+**必须是指针变量**
+
+```go
+// file: config/config.go
+package config
+
+type SomeConfig struct {
+    TestConfig  string `yaml:"TestConfig"`
+}
+
+// 匿名写法
+//go:generate gonacos_config --embed=SomeStruct --config=SomeConfig --dataid=config --codec=yaml
+type SomeStruct struct {
+    *SomeConfig
+}
+
+// 有变量名的写法
+//go:generate gonacos_config --embed=SomeStruct --config=Some:SomeConfig --dataid=config --codec=yaml
+type SomeStruct struct {
+    Some *SomeConfig
+}
+
+```
+
+### 生成代码并使用
+
+跳转到 `config` 目录下，执行命令，生成配置代码
 ```
 > go generate
 ```
 
-3、变量注册监听到nacos
+变量注册监听到nacos
 ```go
 
 // 初始化nacos，配置参数请看 nacos-sdk-go的文档
@@ -38,19 +71,37 @@ conf := gonacos.NacosConf{
     ...
 }
 
+
 ncc, err := gonacos.NewNacosConfigClinet(conf, "DEFAULT_GROUP")
 if err != nil {
     panic(err)
 }
 
-// 注册，第二个参数可以传配置的默认值
+// 标准配置注册，第二个参数可以传配置的默认值
 config.RegisterSomeConfig(ncc, nil)
+
+// 嵌入配置注册
+var globalConfig = config.GlobalConfig{SomeConfig: &config.SomeConfig{}}
+config.RegisterSomeConfig(ncc, &globalConfig.SomeConfig)
 
 
 // 可以在业务中线程安全的使用了
 sc := config.GetSomeConfig()
 fmt.Println(sc.TestConfig)
+
+sc = globalConfig.GetSomeConfig()
+fmt.Println(sc.TestConfig)
 ```
+
+## 关于性能
+
+这两种使用方式的性能直接和 `sync.RWMutex` 和 `atomic.Value` 的性能有关。
+
+|      | 独立结构体        | 嵌入式结构体       |
+|------|--------------|--------------|
+| 使用特性 | atomic.Value | sync.RWMutex |
+| 性能   | 522787660    | 205038752    |  
+
 
 ---
 

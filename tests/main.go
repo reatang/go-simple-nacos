@@ -9,6 +9,7 @@ import (
 
 	gonacos "github.com/reatang/go-simple-nacos"
 	"github.com/reatang/go-simple-nacos/tests/config"
+	"github.com/reatang/go-simple-nacos/tests/config/other_config"
 )
 
 var (
@@ -59,7 +60,14 @@ func main() {
 		panic(err)
 	}
 
+	globalConfig := config.GlobalConfig{
+		SomeConfig: &config.SomeConfig{},
+		Other:      &other_config.OtherConfig{},
+	}
+
 	config.RegisterSomeConfig(ncc, nil)
+	config.RegisterEmbedGlobalConfigSomeConfig(ncc, globalConfig.SomeConfig)
+	config.RegisterEmbedGlobalConfigOther(ncc, globalConfig.Other)
 
 	tc, _ := context.WithTimeout(context.Background(), 20*time.Second)
 	n := atomic.Int64{}
@@ -68,9 +76,16 @@ func main() {
 			for {
 				n.Add(1)
 
+				// 标准配置
 				aaaConfig := config.GetSomeConfig()
 				if aaaConfig.TestConfig != "aaa" && aaaConfig.TestConfig != "bbb" {
-					fmt.Println("值有错误")
+					fmt.Println("值有错误：", aaaConfig.TestConfig)
+				}
+
+				// 嵌入配置
+				other := globalConfig.GetOther()
+				if other.Other != "aaa" && other.Other != "bbb" {
+					fmt.Println("值有错误：", other.Other)
 				}
 			}
 		}()
