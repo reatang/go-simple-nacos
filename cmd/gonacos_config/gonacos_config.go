@@ -26,9 +26,11 @@ func Register{{ .ConfigName.StructFull }}(ncc *gonacos.NacosConfigClient, defCon
 	ncc.WatchF("{{ .Group }}", "{{ .DataId }}", func(namespace, group, dataId, data string) {
 		var c {{ .ConfigName.StructFull }}
 		{{ .DecodeFuncCode }}
-		if err == nil {
-			__{{ .ConfigName.StructFull }}.Store(c)
+		if err != nil {
+			fmt.Println("[gonacos]dataid:config,error:", err.Error())
+			return
 		}
+		__{{ .ConfigName.StructFull }}.Store(c)
 	})
 }
 
@@ -47,7 +49,7 @@ func RegisterEmbed{{ .EmbedStruct }}{{ .ConfigName.VarName }}(ncc *gonacos.Nacos
 
 		{{ .DecodeFuncCode }}
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Println("[gonacos]dataid:{{ .DataId }},error:", err.Error())
 		}
 	})
 }
@@ -202,6 +204,7 @@ func (g *Generator) Printf(format string, args ...interface{}) {
 
 func (g *Generator) parseImport() {
 	// 固定包
+	g.Printf("import \"fmt\"\n")
 	g.Printf("import gonacos \"github.com/reatang/go-simple-nacos\"\n")
 
 	// 分析其他包的配置
@@ -227,7 +230,6 @@ func (g *Generator) parseImport() {
 func (g *Generator) generate() error {
 	var cTemplate *template.Template
 	if g.embedStruct != "" {
-		g.Printf("import \"fmt\"\n")
 		g.Printf("import \"sync\"\n")
 		cTemplate = template.Must(template.New("embed_template").Parse(structEmbedTemplate))
 	} else {
