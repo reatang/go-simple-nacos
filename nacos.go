@@ -18,7 +18,7 @@ type NacosConf struct {
 	Servers []ServerConfig
 }
 
-// Nacos 配置中心客户端
+// NacosConfigClient 配置中心客户端
 type NacosConfigClient struct {
 	// 默认分组，一般被用作环境区分，如：dev、test、prod
 	defaultGroup string
@@ -27,7 +27,7 @@ type NacosConfigClient struct {
 	client config_client.IConfigClient
 }
 
-// 初始化函数
+// NewNacosConfigClinet 初始化函数
 func NewNacosConfigClinet(conf NacosConf, defaultGroup string) (*NacosConfigClient, error) {
 	// 创建客户端
 	client, err := clients.NewConfigClient(

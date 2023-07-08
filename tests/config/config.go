@@ -13,9 +13,9 @@ type SomeConfig struct {
 }
 
 //go:generate gonacos_config --embed=GlobalConfig --config=SomeConfig --dataid=config --codec=yaml
-//go:generate gonacos_config --embed=GlobalConfig --config=Other:other_config.OtherConfig --dataid=other_config --codec=yaml
+//go:generate gonacos_config --embed=GlobalConfig --config=other:other_config.OtherConfig --dataid=other_config --codec=yaml
 type GlobalConfig struct {
 	*SomeConfig
 
-	Other *other_config.OtherConfig
+	other *other_config.OtherConfig
 }
