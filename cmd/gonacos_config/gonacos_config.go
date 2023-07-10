@@ -43,6 +43,10 @@ func Get{{ .ConfigName.StructFull }}() {{ .ConfigName.StructFull }} {
 var {{ .MutexVar }} = sync.RWMutex{}
 
 func RegisterEmbed{{ .EmbedStruct }}{{ .ConfigName.VarName }}(ncc *gonacos.NacosConfigClient, c *{{ .ConfigName.StructFull }}) {
+	if c == nil {
+		panic("RegisterEmbed{{ .EmbedStruct }}{{ .ConfigName.VarName }} param c is nil")
+	}
+
 	ncc.WatchF("{{ .Group }}", "{{ .DataId }}", func(namespace, group, dataId, data string) {
 		{{ .MutexVar }}.Lock()
 		defer {{ .MutexVar }}.Unlock()
