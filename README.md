@@ -65,32 +65,46 @@ type GlobalConfig struct {
 
 变量注册监听到nacos
 ```go
+package main
 
-// 初始化nacos，配置参数请看 nacos-sdk-go的文档
-conf := gonacos.NacosConf{
-    ...
+import (
+	"fmt"
+	gonacos "github.com/reatang/go-simple-nacos"
+)
+
+func main()  {
+	// 初始化nacos，配置参数请看 nacos-sdk-go的文档
+	conf := gonacos.NacosConf{
+		Client: gonacos.ClientConfig{
+			...
+		},
+		Servers: []gonacos.ServerConfig{
+			{
+				...
+			}
+		}
+	}
+
+	ncc, err := gonacos.NewNacosConfigClinet(conf, "DEFAULT_GROUP")
+	if err != nil {
+		panic(err)
+	}
+
+	// 标准配置注册，第二个参数可以传配置的默认值
+	config.RegisterSomeConfig(ncc, nil)
+
+	// 嵌入配置注册
+	var globalConfig = config.GlobalConfig{SomeConfig: &config.SomeConfig{}}
+	config.RegisterSomeConfig(ncc, &globalConfig.SomeConfig)
+
+
+	// 可以在业务中线程安全的使用了
+	sc := config.GetSomeConfig()
+	fmt.Println(sc.TestConfig)
+
+	sc = globalConfig.GetSomeConfig()
+	fmt.Println(sc.TestConfig)
 }
-
-
-ncc, err := gonacos.NewNacosConfigClinet(conf, "DEFAULT_GROUP")
-if err != nil {
-    panic(err)
-}
-
-// 标准配置注册，第二个参数可以传配置的默认值
-config.RegisterSomeConfig(ncc, nil)
-
-// 嵌入配置注册
-var globalConfig = config.GlobalConfig{SomeConfig: &config.SomeConfig{}}
-config.RegisterSomeConfig(ncc, &globalConfig.SomeConfig)
-
-
-// 可以在业务中线程安全的使用了
-sc := config.GetSomeConfig()
-fmt.Println(sc.TestConfig)
-
-sc = globalConfig.GetSomeConfig()
-fmt.Println(sc.TestConfig)
 ```
 
 ## 关于性能
