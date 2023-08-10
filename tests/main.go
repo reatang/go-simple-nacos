@@ -9,7 +9,6 @@ import (
 
 	gonacos "github.com/reatang/go-simple-nacos"
 	"github.com/reatang/go-simple-nacos/tests/config"
-	"github.com/reatang/go-simple-nacos/tests/config/other_config"
 )
 
 var (
@@ -19,6 +18,10 @@ var (
 	namespaceId  = flag.String("namespace_id", "", "nacos namespace id")
 	defaultGroup = flag.String("default_group", "", "nacos default group")
 	grpcPort     = flag.Uint64("grpc_port", 0, "nacos grpc port")
+)
+
+var (
+	globalConfig = config.GlobalConfig{}
 )
 
 func main() {
@@ -60,14 +63,9 @@ func main() {
 		panic(err)
 	}
 
-	globalConfig := config.GlobalConfig{
-		SomeConfig: &config.SomeConfig{},
-		Other:      &other_config.OtherConfig{},
-	}
-
 	config.RegisterSomeConfig(ncc, nil)
-	config.RegisterEmbedGlobalConfigSomeConfig(ncc, globalConfig.SomeConfig)
-	config.RegisterEmbedGlobalConfigOther(ncc, globalConfig.Other)
+	config.RegisterEmbedGlobalConfigSomeConfig(ncc, &globalConfig.SomeConfig)
+	config.RegisterEmbedGlobalConfigOther(ncc, &globalConfig.Other)
 
 	tc, _ := context.WithTimeout(context.Background(), 20*time.Second)
 	n := atomic.Int64{}

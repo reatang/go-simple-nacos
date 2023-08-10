@@ -62,7 +62,7 @@ func (c *{{ .EmbedStruct }}) Get{{ .ConfigName.VarName }}() {{ .ConfigName.Struc
 	{{ .MutexVar }}.RLock()
 	defer {{ .MutexVar }}.RUnlock()
 
-	return *c.{{ .ConfigName.VarName }}
+	return c.{{ .ConfigName.VarName }}
 }
 `
 )

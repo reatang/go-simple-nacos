@@ -32,8 +32,6 @@ type SomeConfig struct {
 
 配置，并编写生成命令
 
-**注意：必须是指针变量**
-
 ```go
 // file: config/config.go
 package config
@@ -45,13 +43,13 @@ type SomeConfig struct {
 // 匿名写法
 //go:generate gonacos_config --embed=GlobalConfig --config=SomeConfig --dataid=config --codec=yaml
 type GlobalConfig struct {
-    *SomeConfig
+    SomeConfig
 }
 
 // 有变量名的写法
 //go:generate gonacos_config --embed=GlobalConfig --config=some:SomeConfig --dataid=config --codec=yaml
 type GlobalConfig struct {
-    some *SomeConfig
+    some SomeConfig
 }
 
 ```
@@ -71,6 +69,8 @@ import (
 	"fmt"
 	gonacos "github.com/reatang/go-simple-nacos"
 )
+
+var globalConfig = config.GlobalConfig{}
 
 func main()  {
 	// 初始化nacos，配置参数请看 nacos-sdk-go的文档
@@ -94,7 +94,6 @@ func main()  {
 	config.RegisterSomeConfig(ncc, nil)
 
 	// 嵌入配置注册
-	var globalConfig = config.GlobalConfig{SomeConfig: &config.SomeConfig{}}
 	config.RegisterSomeConfig(ncc, &globalConfig.SomeConfig)
 
 

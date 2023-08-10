@@ -23,5 +23,5 @@ func (c *GlobalConfig) GetSomeConfig() SomeConfig {
 	__GlobalConfigSomeConfigMutex.RLock()
 	defer __GlobalConfigSomeConfigMutex.RUnlock()
 
-	return *c.SomeConfig
+	return c.SomeConfig
 }
