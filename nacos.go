@@ -27,8 +27,8 @@ type NacosConfigClient struct {
 	client config_client.IConfigClient
 }
 
-// NewNacosConfigClinet 初始化函数
-func NewNacosConfigClinet(conf NacosConf, defaultGroup string) (*NacosConfigClient, error) {
+// NewNacosConfigClient 初始化函数
+func NewNacosConfigClient(conf NacosConf, defaultGroup string) (*NacosConfigClient, error) {
 	// 创建客户端
 	client, err := clients.NewConfigClient(
 		vo.NacosClientParam{

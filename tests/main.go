@@ -55,7 +55,7 @@ func main() {
 		},
 	}
 
-	ncc, err := gonacos.NewNacosConfigClinet(conf, *defaultGroup)
+	ncc, err := gonacos.NewNacosConfigClient(conf, *defaultGroup)
 	if err != nil {
 		panic(err)
 	}
