@@ -85,6 +85,7 @@ func main()  {
 		}
 	}
 
+	// DEFAULT_GROUP 可以被认为是环境，如：dev、test、prod
 	ncc, err := gonacos.NewNacosConfigClient(conf, "DEFAULT_GROUP")
 	if err != nil {
 		panic(err)
