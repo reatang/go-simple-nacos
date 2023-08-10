@@ -95,7 +95,7 @@ func main()  {
 	config.RegisterSomeConfig(ncc, nil)
 
 	// 嵌入配置注册
-	config.RegisterSomeConfig(ncc, &globalConfig.SomeConfig)
+	config.RegisterEmbedGlobalConfigSomeConfig(ncc, &globalConfig.SomeConfig)
 
 
 	// 可以在业务中线程安全的使用了
