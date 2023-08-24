@@ -77,6 +77,7 @@ func main()  {
 	conf := gonacos.NacosConf{
 		Client: gonacos.ClientConfig{
 			...
+			NamespaceId: "", // 重要的参数
 		},
 		Servers: []gonacos.ServerConfig{
 			{
