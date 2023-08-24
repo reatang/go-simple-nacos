@@ -15,6 +15,12 @@ https://github.com/nacos-group/nacos-sdk-go 太难用了，简化使用方案
 
 ## 使用
 
+### 配置内容
+
+```yaml
+TestConfig: "aaabbbccc"
+```
+
 ### 独立结构体配置映射
 
 配置，并编写生成命令
