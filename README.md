@@ -23,6 +23,8 @@ TestConfig: "aaabbbccc"
 
 ### 独立结构体配置映射
 
+将nacos中的配置直接映射到该结构体的变量中，并支持动态更新
+
 配置，并编写生成命令
 ```go
 // file: config/config.go
@@ -35,6 +37,8 @@ type SomeConfig struct {
 ```
 
 ### 嵌入结构体配置映射
+
+将nacos中的配置映射到主结构体成员中，并支持动态更新
 
 配置，并编写生成命令
 
